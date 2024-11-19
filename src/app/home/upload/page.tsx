@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import Toast from "@/hooks/toast";
 import apiClient from "@/app/api";
+import Image from "next/image";
 
 const Page = () => {
   const camera = useRef<CameraType>(null);
@@ -94,6 +95,7 @@ const Page = () => {
   return (
     <div className="flex flex-col h-full">
       {showCamera && (
+        <div className="z-10">
         <Camera
           ref={camera}
           errorMessages={{
@@ -103,10 +105,11 @@ const Page = () => {
             canvas: undefined,
           }}
         />
+        </div>
       )}
 
       {showCamera && (
-        <div className="w-full flex items-center justify-between px-6 absolute bottom-5 left-0 py-4 bg-black/30">
+        <div className="w-full flex items-center justify-between px-6 absolute bottom-5 left-0 py-4 bg-black/30 z-10">
           <button className="h-12 w-12 bg-white rounded-full border-2 border-transparent  opacity-0" />
           <button
             onClick={takePhoto}
@@ -123,17 +126,19 @@ const Page = () => {
 
       {!showCamera && photo && (
         <div className="flex flex-col items-center mt-8 space-y-6">
-          <img
+          <Image
             src={photo}
             alt="Taken photo"
             className="w-64 h-auto rounded-lg shadow-md"
+            height={1000}
+            width={1000}
           />
 
           {/* Public/Private Checkbox */}
           <div className="flex flex-row gap-3 items-center">
-            <Label className="text-xl text-black">Make Image Public</Label>
+            <Label className="text-xl text-black">Make Image Private</Label>
             <Checkbox
-              onChange={() => setIsPublic(!isPublic)}
+              onCheckedChange={() => setIsPublic(!isPublic)}
               className="h-5 w-5"
             />
           </div>

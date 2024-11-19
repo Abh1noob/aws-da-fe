@@ -1,6 +1,6 @@
 "use client";
 import apiClient from "@/app/api";
-import { ChevronLeft, Key } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -15,7 +15,7 @@ const Page = () => {
   const fetchPhotos = async () => {
     try {
       const response = await apiClient.get(
-        `${process.env.NEXT_PUBLIC_BASEURL}/images/public`
+        `${process.env.NEXT_PUBLIC_BASEURL}/images/private`
       );
       console.log(response);
       setImageData(response.data);
@@ -31,10 +31,9 @@ const Page = () => {
   return (
     <div className="flex flex-col items-center h-full">
       {/* Feed Title */}
-      <div className="relative flex w-full items-center justify-center">
-        <Link href={"/home/feed/private"}>
-        <Key className="absolute right-0 top-8" />
-
+      <div className="relative flex w-full items-center justify-center ">
+        <Link href={"/home/feed"}>
+          <ChevronLeft className="absolute left-0 top-8" />
         </Link>
         <h1 className="text-4xl font-extrabold text-gray-800 my-6">
           Image Feed
@@ -52,13 +51,12 @@ const Page = () => {
               {/* User Info */}
               <div className="p-4 border-b border-gray-200">
                 <div className="flex flex-row items-center gap-3">
-                  <div className="flex items-center justify-center w-[30px] h-[30px] rounded-full aspect-square bg-gray-400 text-white">
-                    {image.username[0]}
-                  </div>
-                  <p className="font-semibold text-lg text-gray-900">
-                    {image.username}
-                  </p>
+                <div className="flex items-center justify-center w-[30px] h-[30px] rounded-full aspect-square bg-gray-400 text-white">
+                  {image.username[0]}
                 </div>
+                <p className="font-semibold text-lg text-gray-900">
+                  {image.username}
+                </p></div>
               </div>
 
               {/* Image */}

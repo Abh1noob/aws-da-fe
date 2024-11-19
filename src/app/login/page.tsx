@@ -25,12 +25,12 @@ const Page = () => {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
-      await apiClient.post(`/login`, {
+      const response = await apiClient.post(`/login`, {
         email: email,
         password: password,
       });
       toast.success({ message: "Logged in successfully!" });
-      localStorage.setItem("email", email);
+      localStorage.setItem("access_token", response.data.access_token);
       setTimeout(() => {
         router.push("/home/feed");
       }, 1000);

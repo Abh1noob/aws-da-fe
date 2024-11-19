@@ -1,7 +1,6 @@
-
 import { Metadata } from "next";
 import "./globals.css";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "@/components/ui/toaster";
 
 const APP_NAME = "AWS-DA";
 const APP_DEFAULT_TITLE = "AWS_DA";
@@ -51,10 +50,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={` antialiased`}
-      >
-        <Toaster/>
+      <body className={` antialiased`}>
+        <Toaster />
         {children}
       </body>
     </html>

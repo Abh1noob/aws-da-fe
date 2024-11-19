@@ -1,33 +1,39 @@
 "use client";
-import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
+  const [activeTab, setActiveTab] = useState("home");
+
   const router = useRouter();
-  // Handle tab change
-  const handleTabChange = (value: string) => {
-    if (value === "feed") {
-      router.push("/home/feed"); // Navigate to /home/feed when 'account' tab is selected
-    } else if (value === "upload") {
-      router.push("/home/upload"); // Navigate to /home/upload when 'password' tab is selected
-    }
+
+  const handleTabChange = (tab: string, route: string) => {
+    setActiveTab(tab);
+    router.push(route);
   };
 
   return (
-    <div>
-      <Tabs
-        defaultValue="feed"
-        className="w-full"
-        onValueChange={handleTabChange} // Set the tab change handler
-      >
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="feed">Home</TabsTrigger>
-          <TabsTrigger value="upload">Upload</TabsTrigger>
-        </TabsList>
-        <TabsContent value="feed">{children}</TabsContent>
-        <TabsContent value="upload">{children}</TabsContent>
-      </Tabs>
+    <div className="flex flex-col items-center space-y-4 h-screen">
+      <div className="flex-1 px-4 pt-4 ">{children}</div>
+      <div className="grid grid-cols-2 w-full gap-2 border py-2 fixed bottom-0 bg-white shadow-md">
+        <Button
+          onClick={() => handleTabChange("home", "/home/feed")}
+          className={`w-full py-2 ${
+            activeTab === "home" ? "" : "bg-gray-200 text-black"
+          }`}
+        >
+          Home
+        </Button>
+        <Button
+          onClick={() => handleTabChange("upload", "/home/upload")}
+          className={`w-full py-2 ${
+            activeTab === "upload" ? "" : "bg-gray-200 text-black"
+          }`}
+        >
+          Upload
+        </Button>
+      </div>
     </div>
   );
 };

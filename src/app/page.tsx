@@ -1,57 +1,90 @@
 "use client";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { Upload } from "lucide-react";
+import { useState } from "react";
 import Link from "next/link";
 
-const Page = () => {
-  const [imageData, setImageData] = useState([]);
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-  const fetchPhotos = async () => {
+import { useRouter } from "next/navigation";
+import Toast from "@/hooks/toast";
+import apiClient from "./api";
+
+const Page = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+  const toast = Toast();
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASEURL}/images`
-      );
-      console.log(response);
-      setImageData(response.data);
-    } catch (e) {
-      console.log(e);
+      const response = await apiClient.post(`/login`, {
+        email: email,
+        password: password,
+      });
+      toast.success({ message: "Logged in successfully!" });
+      localStorage.setItem("access_token", response.data.access_token);
+      setTimeout(() => {
+        router.push("/home/feed");
+      }, 1000);
+    } catch (err) {
+      toast.apiError(err);
     }
   };
 
-  useEffect(() => {
-    void fetchPhotos();
-  }, []);
-
   return (
-    <div className="max-w-6xl mx-auto ">
-      <div className="flex flex-row items-center justify-center mb-5 bg-gray-600 py-4">
-        <h1 className="text-3xl font-bold text-center">Image Gallery</h1>
-        <Link href={"/upload"}>
-          <div className=" absolute right-2 top-5 ">
-            <Upload />
-          </div>
-        </Link>
-      </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-5">
-        {imageData.map((item, index) => {
-          return (
-            <div
-              className="overflow-hidden rounded-lg shadow-md transition-transform duration-200 transform hover:scale-105 "
-              key={index}
-            >
-              <Image
-                src={item}
-                alt={`Image ${index + 1}`}
-                height={200}
-                width={200}
-                className="w-full h-full  shadow shadow-white"
+    <div className="flex items-center justify-center h-screen w-screen">
+      <Card className="mx-auto max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardDescription>
+            Enter your email below to login to your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="text"
+                placeholder="ec2@aws-deploy.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
-          );
-        })}
-      </div>
+            <div className="grid gap-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="********"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full">
+              Login
+            </Button>
+          </form>
+          <div className="mt-4 text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <Link href="/signup" className="underline">
+              Sign up
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

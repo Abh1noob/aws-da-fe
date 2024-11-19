@@ -41,9 +41,13 @@ const Page = () => {
             >
               {/* User Info */}
               <div className="p-4 border-b border-gray-200">
+                <div className="flex flex-row items-center gap-3">
+                <div className="flex items-center justify-center w-[30px] h-[30px] rounded-full aspect-square bg-gray-400 text-white">
+                  {image.username[0]}
+                </div>
                 <p className="font-semibold text-lg text-gray-900">
                   {image.username}
-                </p>
+                </p></div>
               </div>
 
               {/* Image */}
